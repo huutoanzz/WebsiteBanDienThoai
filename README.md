@@ -40,18 +40,7 @@ Số lượng thành viên: **01**
 
 ---
 
-## 🛠 Hướng dẫn cài đặt
-
-### Yêu cầu:
-1. **XAMPP**: Cài đặt XAMPP để chạy server PHP và MySQL.
-   - Tải xuống tại [https://www.apachefriends.org/index.html](https://www.apachefriends.org/index.html).
-2. Trình duyệt web (Chrome, Firefox, v.v.).
-3. Text editor/IDE: Visual Studio Code hoặc Abode Dreamweaver.
-
----
-
-### Các bước thực hiện:
-# Hướng Dẫn Cài Đặt và Chạy Dự Án
+## Hướng Dẫn Cài Đặt và Chạy Dự Án
 
 ## 1. Cài đặt XAMPP
 - Tải và cài đặt **XAMPP** từ [Apache Friends](https://www.apachefriends.org/index.html).
