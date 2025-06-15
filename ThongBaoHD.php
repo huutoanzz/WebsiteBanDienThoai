@@ -100,13 +100,15 @@ foreach ($cartItems as $item) {
 $mail = new PHPMailer();
 $mail->isSMTP();
 $mail->Host = 'smtp.gmail.com';
+$mail->CharSet = 'UTF-8';
 $mail->SMTPAuth = true;
-$mail->Username = 'toanphan799@gmail.com';  // Thay đổi với email của bạn
-$mail->Password = 'ptun tlxr fkmw hbrl';     // Thay đổi với mật khẩu ứng dụng của bạn
+$mail->Username = '';  // Thay đổi với email của bạn
+$mail->Password = '';     // Thay đổi với mật khẩu ứng dụng của bạn
 $mail->SMTPSecure = 'tls'; // Hoặc 'ssl' nếu bạn sử dụng cổng 465
 $mail->Port = 587; // Cổng 587 cho TLS hoặc 465 cho SSL
 
-$mail->setFrom('toanphan799@gmail.com', 'Phan Huu Toan');
+$mail->setFrom('toanphan799@gmail.com', 'Thế Giới Di Động Nguyễn Hữu Trí');
+
 $mail->addAddress($email, $fullName);
 
 $mail->isHTML(true);
@@ -129,10 +131,137 @@ foreach ($cartItems as $cartItem) {
     $mail->Body .= "<li>{$cartItem['tenSP']} - Số lượng: {$cartItem['sl']} - Giá: " . number_format($cartItem['donGia'], 0, ',', '.') . " VND</li>";
 }
 
-$mail->Body .= "</ul>
-    <p><strong>Tổng cộng:</strong> " . number_format($total, 0, ',', '.') . " VND</p>
-    </body>
-    </html>";
+$mail->Body = "
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color:rgb(0, 0, 0);
+            padding: 20px;
+            text-align: center;
+        }
+        .header img {
+            max-width: 150px;
+        }
+        .content {
+            padding: 30px;
+        }
+        h2 {
+            color:rgb(0, 0, 0);
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        p {
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .order-details {
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #dedede;
+        }
+        th {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: right;
+            color: #d32f2f;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .footer a {
+            color:rgb(92, 126, 250);
+            background-color:rgb(254, 252, 252);
+            text-decoration: none;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color:rgb(4, 4, 4);
+            color: #f9f9f9;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <img src='https://cdn.haitrieu.com/wp-content/uploads/2021/11/Logo-The-Gioi-Di-Dong-MWG-Y-V.png' alt='Thế Giới Di Động Logo'>
+        </div>
+        <div class='content'>
+            <h2>Xin chào $fullName,</h2>
+            <p>Cảm ơn bạn đã mua sắm tại <strong>Thế Giới Di Động Nguyễn Hữu Trí</strong>. Dưới đây là thông tin chi tiết về đơn hàng của bạn:</p>
+            <div class='order-details'>
+                <p><strong>Địa chỉ giao hàng:</strong> $address</p>
+                <p><strong>Số điện thoại:</strong> $phone</p>
+                <p><strong>Email:</strong> $email</p>
+                <p><strong>Chi tiết đơn hàng:</strong></p>
+                <table>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                    </tr>";
+foreach ($cartItems as $cartItem) {
+    $mail->Body .= "<tr>
+                        <td>{$cartItem['tenSP']}</td>
+                        <td>{$cartItem['sl']}</td>
+                        <td>" . number_format($cartItem['donGia'], 0, ',', '.') . " VND</td>
+                        <td>" . number_format($cartItem['donGia'] * $cartItem['sl'], 0, ',', '.') . " VND</td>
+                    </tr>";
+}
+$mail->Body .= "</table>
+                <p class='total'>Tổng cộng: " . number_format($total, 0, ',', '.') . " VND</p>
+            </div>
+            <p>Chúng tôi sẽ thông báo khi đơn hàng của bạn được xử lý và giao hàng. Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ:</p>
+            <a href='mailto:toanphan799@gmail.com' class='button'>Liên hệ hỗ trợ</a>
+        </div>
+        <div class='footer'>
+            <p><strong>Thế Giới Di Động Nguyễn Hữu Trí</strong><br>
+            Hotline: 1800-1060 | Email: <a href='mailto:toanphan799@gmail.com'>cskh@thegioididong.com</a><br>
+            Website: <a href='https://www.thegioididong.com'>www.thegioididong.com</a></p>
+            <p>Trân trọng,<br>Đội ngũ Thế Giới Di Động</p>
+        </div>
+    </div>
+</body>
+</html>";
+
 
 if(!$mail->send()) {
     echo 'Không thể gửi email xác nhận. Lỗi: ' . $mail->ErrorInfo;
